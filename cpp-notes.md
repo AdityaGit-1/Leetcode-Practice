@@ -260,3 +260,205 @@
   ✅ #1    Two Sum
   
 ## Step 2 Completed — July 2026
+
+## ────────────────────────────────────────
+## STEP 3 — ARRAYS MEDIUM (Completed)
+## ────────────────────────────────────────
+
+## Patterns Learned
+
+### Kadane's Algorithm
+- Maximum Subarray →
+  sum += nums[i]
+  ans = max(ans, sum)
+  if(sum < 0) sum = 0
+  initialize ans = INT_MIN (handles all negative)
+  update ans BEFORE resetting sum
+
+- Maximum Product Subarray →
+  track BOTH maxProd and minProd
+  when nums[i] < 0 → swap(maxProd, minProd)
+  maxProd = max(nums[i], maxProd * nums[i])
+  minProd = min(nums[i], minProd * nums[i])
+  reason: negative × negative = positive
+          min can become max after negative
+
+### Voting Algorithm
+- Majority Element →
+  Boyer-Moore Voting
+  count==0 → new candidate
+  same → count++
+  different → count--
+  works because majority > n/2 times
+
+### Hashing / Prefix Sum
+- Subarray Sum = K →
+  preSum + hashmap
+  mpp[0]=1 (handles subarrays from index 0)
+  remove = preSum - k
+  count += mpp[remove]
+  mpp[preSum]++ AFTER count update
+  use unordered_map not map
+
+- Longest Consecutive →
+  insert all into unordered_set
+  only start counting from sequence START
+  (check st.find(it-1) == st.end())
+  while(st.find(x+1) != st.end()) extend
+
+### Matrix Problems
+- Set Matrix Zeroes O(1) space →
+  use first row/col as markers
+  col0 variable tracks column 0 separately
+  (matrix[0][0] can't track both row 0 and col 0)
+  fill from (1,1) in second pass
+  handle row 0 and col 0 last
+
+- Rotate Image 90° clockwise →
+  transpose (swap matrix[i][j] with matrix[j][i])
+  j starts at i+1 to avoid double swap
+  then reverse each row
+  anti-clockwise → reverse rows first then transpose
+
+- Spiral Matrix →
+  four boundaries: top, bottom, left, right
+  traverse: right → down → left → up
+  shrink boundary AFTER each traversal
+  top++ and right-- OUTSIDE their loops
+  check top<=bottom before left traversal
+  check left<=right before up traversal
+  going left → i>=left (not i<=left)
+  going up   → i>=top  (not i<=top)
+
+### Two Index / Placement
+- Rearrange Array by Sign →
+  posIndex=0, negIndex=1, both += 2
+  vector<int> ans(n) → parentheses not brackets
+  O(1) space impossible here (relative order must preserve)
+
+### Permutation
+- Next Permutation →
+  Step 1: find rightmost dip (nums[i] < nums[i+1])
+  Step 2: if no dip → reverse all (smallest permutation)
+  Step 3: find rightmost element > nums[index]
+  Step 4: swap them
+  Step 5: reverse suffix after index
+  suffix is always descending → reversing gives smallest
+
+## My Mistakes & Fixes
+
+### Mistake 1 — Variable scoping with 'int' keyword
+  if(condition) {
+      int x = value;  ❌ new LOCAL variable
+      int cnt = 1;    ❌ dies after closing brace
+  }
+  // fix — remove 'int' to use outer variable:
+  if(condition) {
+      x = value;  ✅ updates outer x
+      cnt = 1;    ✅ updates outer cnt
+  }
+
+### Mistake 2 — Boundary update inside loop
+  for(int i=left; i<=right; i++){
+      ans.push_back(matrix[top][i]);
+      top++;  ❌ increments top n times
+  }
+  // fix — move boundary update outside:
+  for(int i=left; i<=right; i++)
+      ans.push_back(matrix[top][i]);
+  top++;  ✅
+
+### Mistake 3 — Wrong loop direction
+  for(int i=right; i<=left; i--)  ❌ never executes
+  for(int i=right; i>=left; i--)  ✅ going left
+  for(int i=bottom; i<=top; i--)  ❌ never executes
+  for(int i=bottom; i>=top; i--)  ✅ going up
+  Rule: going left/up → use >= not <=
+
+### Mistake 4 — vector declaration syntax
+  vector<int> ans[nums.size()]  ❌ array of vectors
+  vector<int> ans(nums.size())  ✅ vector of n ints
+  Rule: [] = array, () = size/constructor
+
+### Mistake 5 — map vs unordered_map (repeated)
+  map<int,int>           → O(log n) ❌
+  unordered_map<int,int> → O(1)     ✅
+  Always use unordered_map for hashing problems
+
+### Mistake 6 — Reset logic differs for sum vs product
+  Sum Kadane:     reset to 0 when negative
+                  (negative sum always hurts)
+  Product Kadane: track BOTH max and min
+                  (negative × negative = positive)
+                  swap max/min when current < 0
+
+## Interview Talking Points
+
+### Kadane's Algorithm
+  "Initialize ans=INT_MIN to handle all-negative.
+   Key: update ans BEFORE resetting sum to 0.
+   Resetting works because negative prefix
+   can never help future subarrays."
+
+### Maximum Product Subarray
+  "Extension of Kadane's — track both max and min
+   because negative × negative = positive.
+   Swap max and min when current element is negative."
+
+### Boyer-Moore Voting
+  "Majority element appears > n/2 times so it
+   survives all cancellations. Each non-majority
+   element cancels one majority element at most."
+
+### Subarray Sum = K
+  "Prefix sum + hashmap. preSum[j]-preSum[i]=k
+   means subarray i+1 to j sums to k.
+   So check if preSum-k exists in map.
+   mpp[0]=1 handles subarrays starting from 0."
+
+### Set Matrix Zeroes
+  "O(1) space: use first row/col as markers.
+   matrix[0][0] tracks row 0.
+   col0 variable tracks col 0 separately.
+   Fill from (1,1) to avoid corrupting markers."
+
+### Rotate Image
+  "Transpose then reverse each row = 90° clockwise.
+   Reverse each row then transpose = anti-clockwise."
+
+### Next Permutation
+  "Find rightmost dip, swap with rightmost greater,
+   reverse suffix. Suffix is always descending so
+   reversing gives smallest next arrangement."
+
+### Spiral Matrix
+  "Four shrinking boundaries. Boundary updates
+   go OUTSIDE their loops. Going left/up needs
+   >= comparison not <=."
+
+## New C++ Things Learned
+
+  swap(a, b)              → swaps two values in place
+  auto it : container     → range based for loop
+  st.find(x) == st.end()  → element NOT in set
+  st.find(x) != st.end()  → element IS in set
+  matrix[i].size()        → columns of row i
+  matrix.size()           → number of rows
+  reverse(v.begin()+i, v.end()) → reverse from index i
+
+## Problems Completed — Step 3 Arrays Medium
+
+  ✅ #75   Sort Colors
+  ✅ #169  Majority Element
+  ✅ #53   Maximum Subarray
+  ✅ #152  Maximum Product Subarray
+  ✅ #2149 Rearrange Array Elements by Sign
+  ✅ #31   Next Permutation
+  ✅ #128  Longest Consecutive Sequence
+  ✅ #73   Set Matrix Zeroes
+  ✅ #48   Rotate Image
+  ✅ #54   Spiral Matrix
+  ✅ #560  Subarray Sum Equals K
+  ⏭️ #229  Majority Element II → pending
+
+## Step 3 Completed — July 2026
