@@ -73,7 +73,7 @@ dsa-practice/
 | 1    | Basics                  | 11     | 12    | ✅ Done    | July 2026  |
 | 2    | Arrays Easy             | 9      | 9     | ✅ Done    | July 2026  |
 | 3    | Arrays Medium           | 11     | 11    | ✅ Done    | July 2026  |
-| 4    | Arrays Hard             | 6      | 6     | ✅ Done    | July 2026  |
+| 4    | Arrays Hard             | 6      | 6     | ✅ Done    | August 2026  |
 | 5    | Binary Search           | 0      | 12    | 🔄 Next    | —          |
 | 6    | Strings                 | 0      | 8     | ⏳ Pending | —          |
 | 7    | Linked List             | 0      | 14    | ⏳ Pending | —          |
