@@ -6,8 +6,8 @@ Sheet. Every solution is written from scratch after
 a genuine attempt — no copy-paste.
 
 ## 👤 Profiles
-- 🔗 LeetCode: [your-username](https://leetcode.com/u/Aditya_199153/)
-- 🔗 GitHub: [your-username](https://github.com/AdityaGit-1)
+- 🔗 LeetCode: [Aditya_199153](https://leetcode.com/u/Aditya_199153/)
+- 🔗 GitHub: [AdityaGit-1](https://github.com/AdityaGit-1)
 
 ## 📂 Folder Structure
 
