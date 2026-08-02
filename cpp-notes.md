@@ -462,3 +462,148 @@
   ⏭️ #229  Majority Element II → pending
 
 ## Step 3 Completed — July 2026
+
+## ────────────────────────────────────────
+## STEP 4 — ARRAYS HARD (Completed)
+## ────────────────────────────────────────
+
+## Patterns Learned
+
+### nCr Formula
+- Pascal's Triangle →
+  element = prev * (row-col) / col
+  start each row with 1
+  use long long for element to avoid overflow
+  divide AFTER multiply (integer division works
+  because nCr is always integer)
+
+### Extended Boyer-Moore (Two Candidates)
+- Majority Element II →
+  at most 2 elements appear > n/3 times
+  track el1, el2 and count1, count2
+  el2 = INT_MIN to avoid initial conflict
+  when assigning el1 → check el2 != current
+  when assigning el2 → check el1 != current
+  decrement both when neither matches
+  ALWAYS verify in second pass
+  mini = n/3 + 1 threshold
+
+### Two Pointer with Sorting
+- 3Sum →
+  sort first
+  fix i, two pointer j and k
+  skip duplicate i: i>0 && nums[i]==nums[i-1]
+  skip duplicate j and k after finding triplet
+  sum<0 → j++, sum>0 → k--
+
+- 4Sum →
+  same as 3Sum but two fixed pointers i and j
+  j duplicate skip: j!=i+1 && nums[j]==nums[j-1]
+  use long long — 4 values can overflow int
+  cast: (long long)nums[i] + nums[j] + nums[k] + nums[l]
+
+### Greedy
+- Merge Intervals →
+  sort by start time
+  if ans empty OR start > last end → push new
+  else → merge: end = max(last end, current end)
+  max() handles contained intervals correctly
+
+### Modified Merge Sort
+- Reverse Pairs →
+  count pairs BEFORE merging (halves still sorted)
+  countPairs: two pointer, right never resets
+  because as i increases threshold only gets harder
+  use 2LL to prevent overflow: nums[i] > 2LL*nums[right]
+  merge normally AFTER counting
+
+## My Mistakes & Fixes
+
+### Mistake 1 — Pushing index instead of value in merge
+  temp.push_back(left)       ❌ pushes index number
+  temp.push_back(nums[left]) ✅ pushes actual value
+  Rule: always push nums[index] not index itself
+
+### Mistake 2 — Forgetting to copy temp back to nums
+  merge function built temp but never wrote back ❌
+  Fix: for(int i=low; i<=high; i++) nums[i]=temp[i-low]
+  Without this: array never actually sorted
+  countPairs on parent level gets wrong data
+
+### Mistake 3 — int overflow with multiplication
+  2 * nums[right]    ❌ can overflow if nums[right] ~ 10^9
+  2LL * nums[right]  ✅ forces long long multiplication
+  Same for 4Sum: use (long long) cast on first element
+
+### Mistake 4 — Dead variable declaration
+  int sum = 0; outside loop  ❌ unused, dead code
+  int sum = ... inside loop  ✅ only declare where used
+  Rule: declare variables as close to use as possible
+
+### Mistake 5 — j duplicate skip condition
+  if(nums[j]==nums[j-1]) continue          ❌
+  skips valid first j when nums[i]==nums[i+1]
+  if(j!=i+1 && nums[j]==nums[j-1]) continue ✅
+  j!=i+1 protects first iteration of j
+
+## Interview Talking Points
+
+### Pascal's Triangle
+  "nCr formula: next = prev*(row-col)/col
+   Avoids factorial computation.
+   Use long long for intermediate values.
+   Divide after multiply — integer division
+   works because nCr is always integer."
+
+### Majority Element II
+  "At most 2 elements appear > n/3 times.
+   Extended Boyer-Moore tracks two candidates.
+   Critical: check other candidate before assigning
+   to avoid both being same element.
+   Always verify with second pass."
+
+### 3Sum
+  "Sort then fix i, two pointer j and k.
+   Skip duplicates at three levels — i, j, k.
+   O(n²) time O(1) space."
+
+### 4Sum
+  "Extension of 3Sum — two fixed pointers.
+   long long prevents overflow.
+   j!=i+1 check for correct duplicate skipping.
+   O(n³) time O(1) space."
+
+### Merge Intervals
+  "Sort by start. Greedy scan:
+   no overlap → push new interval.
+   overlap → extend end with max().
+   max() handles contained intervals."
+
+### Reverse Pairs
+  "Modified merge sort.
+   Count pairs BEFORE merging while halves sorted.
+   Two pointer in countPairs — right never resets.
+   2LL prevents overflow.
+   O(n log n) time O(n) space."
+
+## New C++ Things Learned
+
+  2LL * x              → forces long long multiplication
+  (long long)a + b     → cast first operand to long long
+  ans.back()           → reference to last element of vector
+  ans.back()[1]        → modify last interval's end in place
+  sort(v.begin(),v.end()) → sorts vector of vectors by first element
+  intervals[i][0]      → first element of i-th interval
+  intervals[i][1]      → second element of i-th interval
+
+## Problems Completed — Step 4 Arrays Hard
+
+  ✅ #118  Pascal's Triangle
+  ✅ #229  Majority Element II
+  ✅ #15   3Sum
+  ✅ #18   4Sum
+  ✅ #56   Merge Intervals
+  ✅ #493  Reverse Pairs
+  ⏭️ #152  Maximum Product Subarray → done in Step 3
+
+## Step 4 Completed — August 2026
